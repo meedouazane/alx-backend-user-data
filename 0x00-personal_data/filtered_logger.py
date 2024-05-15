@@ -50,12 +50,12 @@ class RedactingFormatter(logging.Formatter):
         return super().format(record)
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Connect to secure database """
     connection = mysql.connector.connect(
-        host=os.getenv('PERSONAL_DATA_DB_HOST'),
-        user=os.getenv("PERSONAL_DATA_DB_USERNAME"),
-        password=os.getenv("PERSONAL_DATA_DB_PASSWORD"),
+        host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
+        user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
+        password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         database=os.getenv("PERSONAL_DATA_DB_NAME")
     )
     return connection
