@@ -44,5 +44,5 @@ class RedactingFormatter(logging.Formatter):
             self.REDACTION,
             record.getMessage(),
             self.SEPARATOR)
-        record.msg = filtered_message.replace(';', '; ')
+        record.msg = filtered_message
         return super().format(record)
