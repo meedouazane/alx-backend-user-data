@@ -50,9 +50,23 @@ class RedactingFormatter(logging.Formatter):
         return super().format(record)
 
 
+PII_FIELDS = ('name', 'phone', 'ssn', 'password', 'email')
+
+
+def get_logger() -> logging.Logger:
+    """ Create logger  """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
+    logger.addHandler(stream_handler)
+    return logger
+
+
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Connect to secure database """
-    connection = mysql.connector.connection.MySQLConnection(
+    connection = mysql.connector.connect(
         user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
