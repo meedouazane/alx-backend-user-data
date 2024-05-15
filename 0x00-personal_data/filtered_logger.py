@@ -5,10 +5,13 @@ from typing import List
 import logging
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+def filter_datum(fields: List[str],
+                 redaction: str,
+                 message: str,
+                 separator: str) -> str:
     """
     :param fields: a list of strings representing all fields to obfuscate
-    :param redaction: a string representing by what the field will be obfuscated
+    :param redaction: a string that will be obfuscated with
     :param message: a string representing the log line
     :param separator: a string representing by which character is separating
     all fields in the log line (message)
@@ -16,7 +19,9 @@ def filter_datum(fields: List[str], redaction: str, message: str, separator: str
     """
     text = message.split(separator)
     for i in range(len(text)):
-        text[i] = re.sub(r'=(.*)', '=' + redaction, text[i]) if any(field in text[i] for field in fields) else text[i]
+        text[i] = re.sub(r'=(.*)', '=' + redaction, text[i]) \
+            if any(field in text[i] for field in fields)\
+            else text[i]
     return separator.join(text)
 
 
@@ -34,6 +39,10 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """ filter values in incoming log records using filter_datum """
-        filtered_message = filter_datum(self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR)
+        filtered_message = filter_datum(
+            self.fields,
+            self.REDACTION,
+            record.getMessage(),
+            self.SEPARATOR)
         record.msg = filtered_message.replace(';', '; ')
         return super().format(record)
