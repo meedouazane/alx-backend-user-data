@@ -22,7 +22,7 @@ def filter_datum(fields: List[str],
     text = message.split(separator)
     for i in range(len(text)):
         text[i] = re.sub(r'=(.*)', '=' + redaction, text[i]) \
-            if any(field in text[i] for field in fields)\
+            if any(field in text[i] for field in fields) \
             else text[i]
     return separator.join(text)
 
@@ -53,9 +53,9 @@ class RedactingFormatter(logging.Formatter):
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Connect to secure database """
     connection = mysql.connector.connect(
-        host=os.getenv('PERSONAL_DATA_DB_HOST', "localhost"),
         user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
+        host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
         database=os.getenv("PERSONAL_DATA_DB_NAME")
     )
     return connection
