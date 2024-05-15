@@ -52,7 +52,7 @@ class RedactingFormatter(logging.Formatter):
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Connect to secure database """
-    connection = mysql.connector.connect(
+    connection = mysql.connector.connection.MySQLConnection(
         user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
         password=os.getenv("PERSONAL_DATA_DB_PASSWORD", ""),
         host=os.getenv("PERSONAL_DATA_DB_HOST", "localhost"),
