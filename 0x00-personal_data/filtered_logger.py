@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-""" Personal data """
+"""
+0x00. Personal data
+"""
 import re
 from typing import List
 import logging
@@ -76,7 +78,9 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """ """
+    """
+    Main Function
+    """
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
