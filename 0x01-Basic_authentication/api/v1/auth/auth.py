@@ -16,6 +16,9 @@ class Auth:
             return False
         if path not in excluded_paths:
             return True
+        for item in excluded_paths:
+            if fnmatch.fnmatch(path, item):
+                return False
 
     def authorization_header(self, request=None) -> str:
         """ public method require authorization header """
