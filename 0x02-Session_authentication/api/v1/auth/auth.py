@@ -25,7 +25,6 @@ class Auth:
         if path not in excluded_paths:
             return True
 
-
     def authorization_header(self, request=None) -> str:
         """ public method require authorization header """
         if request is None or "Authorization" not in request.headers:
