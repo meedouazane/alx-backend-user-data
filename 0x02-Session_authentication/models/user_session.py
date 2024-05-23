@@ -3,7 +3,7 @@
 from models.base import Base
 
 
-def UserSession(Base):
+class UserSession(Base):
     """ Sessions in database """
 
     def __init__(self, *args: list, **kwargs: dict):
