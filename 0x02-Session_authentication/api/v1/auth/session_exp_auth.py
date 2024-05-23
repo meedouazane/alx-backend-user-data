@@ -9,11 +9,12 @@ class SessionExpAuth(SessionAuth):
     """  inherits from SessionAuth """
 
     def __init__(self):
-        s_duration = getenv('SESSION_DURATION')
-        if not s_duration or not s_duration.isdigit():
-            self.session_duration == 0
-        else:
+        """ int class """
+        try:
+            s_duration = getenv('SESSION_DURATION')
             self.session_duration = int(s_duration)
+        except Exception:
+            self.session_duration == 0
 
     def create_session(self, user_id=None):
         """ Overload of create_session """
