@@ -13,9 +13,9 @@ def Session_auth():
     email = request.form.get('email')
     password = request.form.get('password')
     if not email:
-        return jsonify({"error": "email missing"}), 401
+        return jsonify({"error": "email missing"}), 400
     if not password:
-        return jsonify({"error": "password missing"}), 401
+        return jsonify({"error": "password missing"}), 400
     users = User.search({'email': email})
     if not users:
         return jsonify({"error": "no user found for this email"}), 404
