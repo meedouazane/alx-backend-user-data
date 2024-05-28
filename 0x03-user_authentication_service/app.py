@@ -11,8 +11,10 @@ AUTH = Auth()
 
 
 @app.route('/', methods=['GET'])
-def route():
-    """first route"""
+def route() -> str:
+    """
+    first route Basic Flask app
+    """
     return jsonify({"message": "Bienvenue"})
 
 
