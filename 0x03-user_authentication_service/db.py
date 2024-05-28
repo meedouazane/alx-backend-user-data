@@ -55,11 +55,11 @@ class DB:
         :return: The first row found in the users table
         """
         try:
-            user = self._session.query(User).filter_by(**keyword).first()
+            user = self._session.query(User).filter_by(**keyword).one()
         except NoResultFound:
-            raise NoResultFound
+            raise NoResultFound()
         except InvalidRequestError:
-            raise InvalidRequestError
+            raise InvalidRequestError()
         return user
 
     def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
