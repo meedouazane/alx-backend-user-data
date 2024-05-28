@@ -4,6 +4,7 @@
 from typing import Dict
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -53,9 +54,12 @@ class DB:
         :param keyword: Arbitrary keyword arguments
         :return: The first row found in the users table
         """
-        user = self._session.query(User).filter_by(**keyword).first()
-        if not user:
+        try:
+            user = self._session.query(User).filter_by(**keyword).first()
+        except NoResultFound:
             raise NoResultFound
+        except InvalidRequestError:
+            raise InvalidRequestError
         return user
 
     def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
@@ -65,7 +69,10 @@ class DB:
         :param keyword: Arbitrary keyword arguments
         :return: None
         """
-        user = self.find_user_by(id=user_id)
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise ValueError
         for key, value in keyword.items():
             if not hasattr(user, key):
                 raise ValueError
