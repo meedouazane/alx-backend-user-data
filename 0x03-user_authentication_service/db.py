@@ -55,7 +55,7 @@ class DB:
         :return: The first row found in the users table
         """
         try:
-            user = self._session.query(User).filter_by(**keyword).one()
+            user = self._session.query(User).filter_by(**keyword).first()
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
