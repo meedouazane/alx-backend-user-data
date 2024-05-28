@@ -48,7 +48,7 @@ class DB:
             raise
         return user
 
-    def find_user_by(self, **keyword: Dict[str, str]) -> User:
+    def find_user_by(self, **keyword):
         """
         Get the first row found in the users table
         :param keyword: Arbitrary keyword arguments
