@@ -32,7 +32,12 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """ add and save user to database """
+        """
+        Add and save user to database
+        :param email: email of user
+        :param hashed_password: password of user
+        :return: User object
+        """
         user = User(email=email, hashed_password=hashed_password)
         try:
             self._session.add(user)
@@ -43,14 +48,23 @@ class DB:
         return user
 
     def find_user_by(self, **keyword: Dict[str, str]) -> User:
-        """ returns the first row found in the users table """
+        """
+        Get the first row found in the users table
+        :param keyword: Arbitrary keyword arguments
+        :return: The first row found in the users table
+        """
         user = self._session.query(User).filter_by(**keyword).first()
         if not user:
             raise NoResultFound
         return user
 
     def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
-        """ update user by their user_id """
+        """
+        Update user by their user_id
+        :param user_id: id of user
+        :param keyword: Arbitrary keyword arguments
+        :return: None
+        """
         user = self.find_user_by(id=user_id)
         for key, value in keyword.items():
             if not hasattr(user, key):
