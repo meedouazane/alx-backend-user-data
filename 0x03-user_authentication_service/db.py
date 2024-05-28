@@ -56,7 +56,7 @@ class DB:
         """
         session = self._session
         try:
-            user = self.session(User).filter_by(**keyword).one()
+            user = self._session.query(User).filter_by(**keyword).one()
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
@@ -70,7 +70,6 @@ class DB:
         :param keyword: Arbitrary keyword arguments
         :return: None
         """
-        session = self._session
         try:
             user = self.find_user_by(id=user_id)
         except NoResultFound:
@@ -79,5 +78,5 @@ class DB:
             if not hasattr(user, key):
                 raise ValueError
             user.key = value
-        session.commit()
-        return None
+
+        self._session.commit()
