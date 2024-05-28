@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Hash password """
 import bcrypt
-
+from sqlalchemy.orm.exc import NoResultFound
 import uuid
 from user import User
 from db import DB
