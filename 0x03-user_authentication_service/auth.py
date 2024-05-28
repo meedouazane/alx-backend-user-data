@@ -10,13 +10,11 @@ from db import DB
 
 
 def _hash_password(password: str) -> bytes:
+    """ Creates password hash
+        Args:
+            - password: user password
+        Return:
+            - hashed password
     """
-    takes in a password string arguments and returns bytes.
-    Args:
-        password: password from user
-    Return:
-         hashed password
-    """
-    byte = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(byte, salt)
+    e_pwd = password.encode()
+    return bcrypt.hashpw(e_pwd, bcrypt.gensalt())
