@@ -34,8 +34,12 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """ add and save user to database """
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
+        try:
+            self._session.add(user)
+            self._session.commit()
+        except Exception:
+            self._session.rollback()
+            raise
         return user
 
     def find_user_by(self, **keyword):
