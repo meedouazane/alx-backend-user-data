@@ -20,6 +20,15 @@ def _hash_password(password: str) -> bytes:
     return bcrypt.hashpw(byte, salt)
 
 
+def _generate_uuid(self):
+    """
+    Generate string representation of a new UUID
+    Return:
+        string representation of a new UUID
+    """
+    return str(uuid.uuid4())
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -58,14 +67,6 @@ class Auth:
         except NoResultFound:
             return False
 
-    def _generate_uuid(self):
-        """
-        Generate string representation of a new UUID
-        Return:
-            string representation of a new UUID
-        """
-        return str(uuid.uuid4())
-
     def create_session(self, email: str) -> str:
         """
         Get session ID
@@ -74,7 +75,7 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
-            user.session_id = self._generate_uuid()
+            user.session_id = _generate_uuid()
             return user.session_id
         except NoResultFound:
             return None
@@ -111,7 +112,7 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
-            uuid_gen = self._generate_uuid()
+            uuid_gen = _generate_uuid()
             return self._db.update_user(user.id, reset_token=uuid_gen)
         except NoResultFound:
             raise ValueError
