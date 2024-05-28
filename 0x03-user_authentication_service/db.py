@@ -48,18 +48,19 @@ class DB:
             raise
         return user
 
-    def find_user_by(self, **keyword):
+    def find_user_by(self, **keyword: Dict[str, str]) -> User:
         """
         Get the first row found in the users table
         :param keyword: Arbitrary keyword arguments
         :return: The first row found in the users table
         """
+        session = self._session
         try:
-            user = self._session.query(User).filter_by(**keyword).one()
+            user = self.session(User).filter_by(**keyword).one()
         except NoResultFound:
-            raise NoResultFound
+            raise NoResultFound()
         except InvalidRequestError:
-            raise InvalidRequestError
+            raise InvalidRequestError()
         return user
 
     def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
@@ -69,6 +70,7 @@ class DB:
         :param keyword: Arbitrary keyword arguments
         :return: None
         """
+        session = self._session
         try:
             user = self.find_user_by(id=user_id)
         except NoResultFound:
@@ -77,4 +79,5 @@ class DB:
             if not hasattr(user, key):
                 raise ValueError
             user.key = value
-        self._session.commit()
+        session.commit()
+        return None
