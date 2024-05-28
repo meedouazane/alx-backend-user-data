@@ -20,15 +20,6 @@ def _hash_password(password: str) -> bytes:
     return bcrypt.hashpw(byte, salt)
 
 
-def _generate_uuid(self) -> str:
-    """
-    Generate string representation of a new UUID
-    Return:
-        string representation of a new UUID
-    """
-    return str(uuid4())
-
-
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -131,3 +122,12 @@ class Auth:
             self._db.update_user(user.id, reset_token=None)
         except NoResultFound:
             raise ValueError
+
+
+def _generate_uuid(self) -> str:
+    """
+    Generate string representation of a new UUID
+    Return:
+        string representation of a new UUID
+    """
+    return str(uuid4())
