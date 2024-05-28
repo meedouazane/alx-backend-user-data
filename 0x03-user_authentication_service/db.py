@@ -77,8 +77,4 @@ class DB:
             if not hasattr(user, key):
                 raise ValueError
             user.key = value
-        try:
-            self._session.commit()
-        except Exception:
-            raise ValueError
-        return None
+        self._session.commit()
