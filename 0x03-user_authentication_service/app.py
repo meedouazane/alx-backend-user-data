@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """ Flask app """
-from flask import (Flask, jsonify, url_map,
+from flask import (Flask, jsonify,
                    request, abort, make_response, redirect)
 from auth import Auth
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
-app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 AUTH = Auth()
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET'], strict_slashes=False)
 def route() -> str:
     """
     first route Basic Flask app
@@ -18,9 +16,11 @@ def route() -> str:
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route('/users', methods=['POST'])
-def register_user():
-    """ Register user """
+@app.route('/users', methods=['POST'], strict_slashes=False)
+def register_user() -> str:
+    """
+    Register user
+    """
     email = request.form.get('email')
     password = request.form.get('password')
     try:
@@ -30,9 +30,11 @@ def register_user():
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST'])
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login():
-    """ Log in function """
+    """
+    Log in function
+    """
     email = request.form.get('email')
     password = request.form.get('password')
     if not AUTH.valid_login(email, password):
@@ -47,9 +49,11 @@ def login():
         return response
 
 
-@app.route('/sessions', methods=['DELETE'])
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
 def logout():
-    """Log out function"""
+    """
+    Log out function
+    """
     sess_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(sess_id)
     if user:
@@ -59,9 +63,11 @@ def logout():
         abort(403)
 
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile():
-    """ User profile """
+    """
+    User profile
+    """
     sess_id = request.cookies.get("session_id")
     if sess_id:
         user = AUTH.get_user_from_session_id(sess_id)
@@ -70,9 +76,11 @@ def profile():
     abort(403)
 
 
-@app.route('/reset_password', methods=['POST'])
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token():
-    """ Get reset password token """
+    """
+    Get reset password token
+    """
     email = request.form.get("email")
     if email:
         reset_token = AUTH.get_reset_password_token(email)
@@ -84,7 +92,7 @@ def get_reset_password_token():
     abort(403)
 
 
-@app.route('/reset_password', methods=['POST'])
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
 def update_password():
     """ Update password end-point """
     email = request.form.get("email")
