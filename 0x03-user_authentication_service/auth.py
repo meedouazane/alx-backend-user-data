@@ -10,14 +10,23 @@ from db import DB
 def _hash_password(password: str) -> bytes:
     """
     takes in a password string arguments and returns bytes.
-    :param password: password from user
-    :return: hashed password
+    Args:
+        password: password from user
+    Return:
+         hashed password
     """
     byte = password.encode('utf-8')
     salt = bcrypt.gensalt()
-    hash = bcrypt.hashpw(byte, salt)
-    return hash
+    return bcrypt.hashpw(byte, salt)
 
+
+def _generate_uuid(self):
+    """
+    Generate string representation of a new UUID
+    Return:
+        string representation of a new UUID
+    """
+    return str(uuid.uuid4())
 
 class Auth:
     """Auth class to interact with the authentication database.
@@ -56,13 +65,6 @@ class Auth:
                 return False
         except NoResultFound:
             return False
-
-    def _generate_uuid(self):
-        """
-         Generate string representation of a new UUID
-        :return: string representation of a new UUID
-        """
-        return str(uuid.uuid4())
 
     def create_session(self, email: str) -> str:
         """
