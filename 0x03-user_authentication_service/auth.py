@@ -103,10 +103,11 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
-            uuid_gen = _generate_uuid()
-            return self._db.update_user(user.id, reset_token=uuid_gen)
         except NoResultFound:
             raise ValueError
+        uuid_gen = _generate_uuid()
+        self._db.update_user(user.id, reset_token=uuid_gen)
+        return uuid_gen
 
     def update_password(self, reset_token: str, password: str) -> None:
         """
