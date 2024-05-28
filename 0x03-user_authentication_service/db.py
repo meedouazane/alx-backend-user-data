@@ -4,7 +4,7 @@
 from typing import Dict
 
 from sqlalchemy import create_engine
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import User, Base
