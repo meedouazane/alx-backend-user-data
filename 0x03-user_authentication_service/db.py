@@ -48,7 +48,7 @@ class DB:
             raise
         return user
 
-    def find_user_by(self, **keyword: Dict[str, str]) -> User:
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """
         Get the first row found in the users table
         :param keyword: Arbitrary keyword arguments
@@ -63,7 +63,7 @@ class DB:
             raise InvalidRequestError()
         return user
 
-    def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
+    def update_user(self, user_id: int, **kwargs: Dict[str, str]) -> None:
         """
         Update user by their user_id
         :param user_id: id of user
