@@ -1,23 +1,12 @@
 #!/usr/bin/env python3
-""" Hash password """
+"""
+Authentication moduel for user
+"""
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 from user import User
 from db import DB
-
-
-def _hash_password(password: str) -> bytes:
-    """
-    takes in a password string arguments and returns bytes.
-    Args:
-        password: password from user
-    Return:
-         hashed password
-    """
-    byte = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(byte, salt)
 
 
 class Auth:
@@ -123,6 +112,19 @@ class Auth:
         hashed = _hash_password(password)
         self._db.update_user(user.id,
                              hashed_password=hashed, reset_token=None)
+
+
+def _hash_password(password: str) -> bytes:
+    """
+    takes in a password string arguments and returns bytes.
+    Args:
+        password: password from user
+    Return:
+         hashed password
+    """
+    byte = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(byte, salt)
 
 
 def _generate_uuid(self) -> str:
