@@ -56,7 +56,7 @@ class DB:
         """
         session = self._session
         try:
-            user = self._session.query(User).filter_by(**keyword).one()
+            user = self._session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
@@ -74,7 +74,7 @@ class DB:
             user = self.find_user_by(id=user_id)
         except NoResultFound:
             raise ValueError
-        for key, value in keyword.items():
+        for key, value in kwargs.items():
             if not hasattr(user, key):
                 raise ValueError
             user.key = value
