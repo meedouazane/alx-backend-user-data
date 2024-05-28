@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """DB module
 """
+from typing import Dict
+
 from sqlalchemy import create_engine
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from user import User
-
-from user import Base
+from user import User, Base
 
 
 class DB:
@@ -42,14 +42,14 @@ class DB:
             raise
         return user
 
-    def find_user_by(self, **keyword):
+    def find_user_by(self, **keyword: Dict[str, str]) -> User:
         """ returns the first row found in the users table """
         user = self._session.query(User).filter_by(**keyword).first()
         if not user:
             raise NoResultFound
         return user
 
-    def update_user(self, user_id, **keyword):
+    def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
         """ update user by their user_id """
         user = self.find_user_by(id=user_id)
         for key, value in keyword.items():
