@@ -70,14 +70,12 @@ class DB:
         :param keyword: Arbitrary keyword arguments
         :return: None
         """
-        try:
-            user = self.find_user_by(id=user_id)
-        except NoResultFound:
-            raise ValueError
+        user = self.find_user_by(id=user_id)
         session = self._session
         for key, value in kwargs.items():
-            if not hasattr(user, key):
+            if not hasattr(User, key):
                 raise ValueError
-            user.key = value
+            setattr(user, key, value)
         session.commit()
+
         self._session.commit()
