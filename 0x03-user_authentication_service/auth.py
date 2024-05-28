@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-""" Hash password """
+""" 
+Authentication module for user 
+"""
 import bcrypt
 from sqlalchemy.exc import NoResultFound
 import uuid
