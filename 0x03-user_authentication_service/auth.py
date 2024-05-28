@@ -2,7 +2,7 @@
 """ Hash password """
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
-import uuid
+from uuid import uuid4
 from user import User
 from db import DB
 
@@ -26,7 +26,7 @@ def _generate_uuid(self) -> str:
     Return:
         string representation of a new UUID
     """
-    return str(uuid.uuid4())
+    return str(uuid4())
 
 
 class Auth:
