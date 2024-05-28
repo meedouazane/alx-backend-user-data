@@ -20,7 +20,7 @@ def _hash_password(password: str) -> bytes:
     return bcrypt.hashpw(byte, salt)
 
 
-def _generate_uuid(self):
+def _generate_uuid(self) -> str:
     """
     Generate string representation of a new UUID
     Return:
