@@ -52,17 +52,14 @@ class DB:
         """
         Get the first row found in the users table
         :param keyword: Arbitrary keyword arguments
-        Raises:
-            error: NoResultFound: When no results are found.
-            error: InvalidRequestError: When invalid query arguments are passed
         :return: The first row found in the users table
         """
         try:
             user = self._session.query(User).filter_by(**keyword).one()
         except NoResultFound:
-            raise NoResultFound()
+            raise NoResultFound
         except InvalidRequestError:
-            raise InvalidRequestError()
+            raise InvalidRequestError
         return user
 
     def update_user(self, user_id: int, **keyword: Dict[str, str]) -> None:
@@ -80,5 +77,8 @@ class DB:
             if not hasattr(user, key):
                 raise ValueError
             user.key = value
-        self._session.commit()
+        try:
+            self._session.commit()
+        except Exception:
+            raise ValueError
         return None
