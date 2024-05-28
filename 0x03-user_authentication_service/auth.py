@@ -3,11 +3,16 @@
 import bcrypt
 from sqlalchemy.exc import NoResultFound
 import uuid
+from user import User
 from db import DB
 
 
 def _hash_password(password: str) -> bytes:
-    """ takes in a password string arguments and returns bytes. """
+    """
+    takes in a password string arguments and returns bytes.
+    :param password: password from user
+    :return: hashed password
+    """
     byte = password.encode('utf-8')
     salt = bcrypt.gensalt()
     hash = bcrypt.hashpw(byte, salt)
@@ -19,10 +24,16 @@ class Auth:
     """
 
     def __init__(self):
+        """Initialize"""
         self._db = DB()
 
-    def register_user(self, email, password):
-        """ Register user """
+    def register_user(self, email: str, password: str) -> User:
+        """
+        Register user
+        :param email: email of user
+        :param password: password of user
+        :return: User User object
+        """
         try:
             if self._db.find_user_by(email=email):
                 raise ValueError(f'User {email} already exists')
@@ -30,8 +41,13 @@ class Auth:
             user = self._db.add_user(email, _hash_password(password))
         return user
 
-    def valid_login(self, email, password):
-        """ Credentials validation """
+    def valid_login(self, email: str, password: str) -> bool:
+        """
+        Credentials validation
+        :param email: email of user
+        :param password: password of user
+        :return: User User object
+        """
         try:
             user = self._db.find_user_by(email=email)
             if bcrypt.checkpw(password.encode('utf-8'), user.hashed_password):
@@ -42,11 +58,18 @@ class Auth:
             return False
 
     def _generate_uuid(self):
-        """  return a string representation of a new UUID """
+        """
+         Generate string representation of a new UUID
+        :return: string representation of a new UUID
+        """
         return str(uuid.uuid4())
 
-    def create_session(self, email):
-        """ Get session ID """
+    def create_session(self, email: str) -> str:
+        """
+        Get session ID
+        :param email: email of user
+        :return: session id of user
+        """
         try:
             user = self._db.find_user_by(email=email)
             user.session_id = self._generate_uuid()
@@ -54,8 +77,12 @@ class Auth:
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(self, session_id):
-        """ Find user by session ID """
+    def get_user_from_session_id(self, session_id: str) -> User:
+        """
+        Find user by session ID
+        :param session_id: session id of user
+        :return: User object
+        """
         if not session_id:
             return None
         try:
@@ -64,14 +91,22 @@ class Auth:
         except NoResultFound:
             return None
 
-    def destroy_session(self, user_id):
-        """ Destroy session """
+    def destroy_session(self, user_id: int) -> None:
+        """
+        Destroy session
+        :param user_id: id of user
+        :return: None
+        """
         if user_id:
             self._db.update_user(user_id, session_id=None)
             return None
 
-    def get_reset_password_token(self, email):
-        """ Generate reset password token """
+    def get_reset_password_token(self, email: str) -> str:
+        """
+        Generate reset password token
+        :param email: email of user
+        :return: Return the token
+        """
         try:
             user = self._db.find_user_by(email=email)
             uuid_gen = self._generate_uuid()
@@ -79,8 +114,13 @@ class Auth:
         except NoResultFound:
             raise ValueError
 
-    def update_password(self, reset_token, password):
-        """ Update password """
+    def update_password(self, reset_token: str, password: str) -> None:
+        """
+        Update password
+        :param reset_token: user reset token
+        :param password: user password
+        :return: None
+        """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
             hashed = _hash_password(password)
