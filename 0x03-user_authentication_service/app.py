@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """ Flask app """
-from flask import Flask, jsonify, request, abort, make_response, redirect
+from flask import (Flask, jsonify, url_map,
+                   request, abort, make_response, redirect)
 from auth import Auth
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 AUTH = Auth()
 
 
