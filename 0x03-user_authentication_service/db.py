@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""DB module
+"""
+DB module for authentication
 """
 from typing import Dict
 
@@ -12,7 +13,8 @@ from user import User, Base
 
 
 class DB:
-    """DB class
+    """
+    DB class for authentication
     """
 
     def __init__(self) -> None:
