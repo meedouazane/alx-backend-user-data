@@ -28,26 +28,59 @@ def log_in(email: str, password: str) -> str:
     """ Test for login """
     payload = {'email': email, 'password': password}
     r = requests.post('http://127.0.0.1:5000/sessions', data=payload)
-    print(r.status_code)
+    if r.status_code == 401:
+        return 'Not valid'
     assert r.status_code == 200
     expected = {"email": email, "message": "logged in"}
     assert (r.json() == expected)
     return r.cookies.get('session_id')
 
 
-
 def profile_unlogged() -> None:
-    """ """
+    """ Test profile_unlogged """
+    r = requests.get('http://127.0.0.1:5000/profile')
+    assert r.status_code == 403
+
 
 def profile_logged(session_id: str) -> None:
-    """ """
+    """ Test for profile logging  """
+    payload = {'session_id': session_id}
+    r = requests.get('http://127.0.0.1:5000/profile', data=payload)
+    assert r.status_code == 200
+    data = r.json()
+    expected = {"email": data.email}
+    assert (r.json() == expected)
+
+
 def log_out(session_id: str) -> None:
-    """ """
+    """ Test for logout """
+    payload = {'session_id': session_id}
+    r = requests.delete('http://127.0.0.1:5000/sessions', data=payload)
+    assert r.status_code == 302
+
+
 def reset_password_token(email: str) -> str:
-    """ """
+    """ Test for reset password token  """
+    payload = {'email': email}
+    r = requests.post('http://127.0.0.1:5000/reset_password', data=payload)
+    assert r.status_code == 200
+    data = r.json()
+    expected = {"email": email, "reset_token": data.get('reset_token')}
+    assert (data == expected)
+    return data.get('reset_token')
+
 
 def update_password(email: str, reset_token: str, new_password: str) -> None:
-    """ """
+    """ Test for Update password """
+    payload = {'email': email,
+               'reset_token': reset_token,
+               'new_password': new_password
+               }
+    r = requests.put('http://127.0.0.1:5000/reset_password', data=payload)
+    assert r.status_code == 200
+    expected = {"email": email, "message": "Password updated"}
+    data = r.json()
+    assert(data == expected)
 
 
 EMAIL = "guillaume@holberton.io"
