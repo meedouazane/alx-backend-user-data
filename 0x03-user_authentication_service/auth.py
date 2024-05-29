@@ -1,12 +1,34 @@
 #!/usr/bin/env python3
 """
-Authentication moduel for user
+Authentication for module
 """
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 from user import User
 from db import DB
+
+
+def _hash_password(password: str) -> bytes:
+    """
+    takes in a password string arguments and returns bytes.
+    Args:
+        password: password from user
+    Return:
+         hashed password
+    """
+    byte = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(byte, salt)
+
+
+def _generate_uuid(self) -> str:
+    """
+    Generate string representation of a new UUID
+    Return:
+        string representation of a new UUID
+    """
+    return str(uuid4())
 
 
 class Auth:
@@ -55,7 +77,7 @@ class Auth:
         """
         try:
             user = self._db.find_user_by(email=email)
-            user.session_id = _generate_uuid()
+            user.session_id = _generate_uuid(self)
             return user.session_id
         except NoResultFound:
             return None
@@ -94,7 +116,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
             raise ValueError
-        uuid_gen = _generate_uuid()
+        uuid_gen = _generate_uuid(self)
         self._db.update_user(user.id, reset_token=uuid_gen)
         return uuid_gen
 
@@ -111,26 +133,5 @@ class Auth:
             raise ValueError
         hashed = _hash_password(password)
         self._db.update_user(user.id,
-                             hashed_password=hashed, reset_token=None)
-
-
-def _hash_password(password: str) -> bytes:
-    """
-    takes in a password string arguments and returns bytes.
-    Args:
-        password: password from user
-    Return:
-         hashed password
-    """
-    byte = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(byte, salt)
-
-
-def _generate_uuid(self) -> str:
-    """
-    Generate string representation of a new UUID
-    Return:
-        string representation of a new UUID
-    """
-    return str(uuid4())
+                             hashed_password=hashed,
+                             reset_token=None)
